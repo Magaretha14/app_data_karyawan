@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "102310340656",
+    "project_id": "datakaryawan-c43d7",
+    "storage_bucket": "datakaryawan-c43d7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102310340656:android:8333be0ee2d2689bfc25f5",
+        "android_client_info": {
+          "package_name": "com.example.app_data_karyawan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVLkz0akPaL_O2g84ZEOZld5PGVBgkB9E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
