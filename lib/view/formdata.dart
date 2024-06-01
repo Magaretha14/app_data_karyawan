@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:app_data_karyawan/controller/formdata_controller.dart';
 import 'package:app_data_karyawan/model/formdata_model.dart';
 import 'package:app_data_karyawan/view/maps_page.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Formpage extends StatefulWidget {
   const Formpage({super.key});
@@ -257,24 +261,25 @@ class _FormpageState extends State<Formpage> {
                     ),
                   ),
                 ),
-                TextFormField(
-                  controller: _controllerGambar,
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    hintText: "Masukkan gambar anda",
-                    prefixIcon: const Icon(Icons.camera_alt),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                Row(
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () => _uploadImage(ImageSource.camera),
+                      icon: const Icon(Icons.camera),
+                      label: const Text('Camera'),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                    const SizedBox(width: 10),
+                    ElevatedButton.icon(
+                      onPressed: () => _uploadImage(ImageSource.gallery),
+                      icon: const Icon(Icons.photo_library),
+                      label: const Text('Gallery'),
                     ),
-                  ),
-                  readOnly: true,
-                  onChanged: (value) {
-                    gambar = value;
-                  },
+                  ],
                 ),
+                const SizedBox(height: 20),
+                gambar != null
+                    ? Image.network(gambar!)
+                    : const Text('No image selected'),
                 const SizedBox(
                   height: 20,
                 ),
@@ -305,5 +310,40 @@ class _FormpageState extends State<Formpage> {
         ),
       ),
     );
+  }
+
+  // Method Upload
+  Future<void> _uploadImage(ImageSource source) async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: source);
+
+    if (pickedImage != null) {
+      String uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
+
+      // Get a reference to storage root
+      Reference referenceRoot = FirebaseStorage.instance.ref();
+      Reference referenceDirImage = referenceRoot.child('images');
+
+      // create a reference
+      Reference referenceImageToUpload =
+          referenceDirImage.child(uniqueFileName);
+
+      // Handle error/success
+      try {
+        // Store the file
+        await referenceImageToUpload.putFile(
+          File(pickedImage.path),
+        );
+
+        // success message
+        gambar = await referenceImageToUpload.getDownloadURL();
+
+        setState(() {
+          gambar!;
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 }

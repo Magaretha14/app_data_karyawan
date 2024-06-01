@@ -55,44 +55,6 @@ class _MapsPageState extends State<MapsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Select Location"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text('Search Location'),
-                    content: TextField(
-                      controller: searchController,
-                      decoration:
-                          const InputDecoration(hintText: 'Enter location'),
-                    ),
-                    actions: [
-                      TextButton(
-                        child: const Text('Cancel'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Search'),
-                        onPressed: () {
-                          String searchTerm = searchController.text;
-                          if (searchTerm.isNotEmpty) {
-                            (searchTerm);
-                            Navigator.of(context).pop();
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-        ],
       ),
       body: GoogleMap(
         myLocationEnabled: true,

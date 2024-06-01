@@ -20,9 +20,16 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  // Future<void> _refreshData() async {
+  //   await dkController.getDataKaryawan();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Data Karyawan'),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -89,7 +96,11 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Formpage()),
-          );
+          ).then((value) => {
+                setState(() {
+                  dkController.getDataKaryawan();
+                })
+              });
         },
         child: const Icon(Icons.add),
       ),
