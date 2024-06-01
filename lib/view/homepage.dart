@@ -29,7 +29,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Data Karyawan'),
+        backgroundColor: Colors.purple[200],
       ),
+      backgroundColor: Colors.purple[100],
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -75,10 +77,56 @@ class _HomePageState extends State<HomePage> {
                             });
                           },
                           child: Card(
+                            color: Colors.purple[50],
                             elevation: 10,
-                            child: ListTile(
-                              title: Text(datakaryawan[index]['nama']),
-                              subtitle: Text(datakaryawan[index]['notelp']),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  width: 150,
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Image.network(
+                                    datakaryawan[index]['gambar'],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Nama : ${datakaryawan[index]['nama']}",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "No. Telp : ${datakaryawan[index]['notelp']}",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "Posisi : ${datakaryawan[index]['posisi']}",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "Status : ${datakaryawan[index]['status']}",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "Alamat : ${datakaryawan[index]['alamat']}",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),

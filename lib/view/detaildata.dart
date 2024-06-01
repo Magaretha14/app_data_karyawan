@@ -41,6 +41,17 @@ class _DetailDataPageState extends State<DetailDataPage> {
             padding: const EdgeInsets.all(30.0),
             child: Column(
               children: [
+                if (widget.gambar != null && widget.gambar!.isNotEmpty)
+                  Container(
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: Image.network(
+                      widget.gambar!,
+                      width: 150,
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 Container(
                   alignment: Alignment.centerLeft,
                   child: const Text(
@@ -111,7 +122,7 @@ class _DetailDataPageState extends State<DetailDataPage> {
                 TextFormField(
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.smartphone),
+                    prefixIcon: const Icon(Icons.personal_injury_outlined),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -139,7 +150,7 @@ class _DetailDataPageState extends State<DetailDataPage> {
                 TextFormField(
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.smartphone),
+                    prefixIcon: const Icon(Icons.offline_pin),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -177,34 +188,6 @@ class _DetailDataPageState extends State<DetailDataPage> {
                     ),
                   ),
                   initialValue: widget.alamat,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: const Text(
-                    'Gambar :',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    hintText: "Masukkan gambar anda",
-                    prefixIcon: const Icon(Icons.image),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  initialValue: widget.gambar,
                 ),
                 const SizedBox(
                   height: 20,
