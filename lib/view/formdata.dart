@@ -60,7 +60,6 @@ class _FormpageState extends State<Formpage> {
   final TextEditingController _controllerNama = TextEditingController();
   final TextEditingController _controllerNoTelp = TextEditingController();
   final TextEditingController _controllerAlamat = TextEditingController();
-  final TextEditingController _controllerGambar = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +102,12 @@ class _FormpageState extends State<Formpage> {
                   onChanged: (value) {
                     nama = value;
                   },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Nama tidak boleh kosong';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(
                   height: 20,
@@ -133,6 +138,12 @@ class _FormpageState extends State<Formpage> {
                   ),
                   onChanged: (value) {
                     notelp = value;
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'No. HP tidak boleh kosong';
+                    }
+                    return null;
                   },
                 ),
                 const SizedBox(
@@ -222,7 +233,6 @@ class _FormpageState extends State<Formpage> {
                 TextFormField(
                   controller: _controllerAlamat,
                   keyboardType: TextInputType.name,
-                  maxLines: 3,
                   decoration: InputDecoration(
                     hintText: "Masukkan Alamat karyawan",
                     prefixIcon: const Icon(Icons.work),
@@ -246,6 +256,12 @@ class _FormpageState extends State<Formpage> {
                           }),
                         ));
                   },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Alamat tidak boleh kosong';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(
                   height: 20,
@@ -260,6 +276,16 @@ class _FormpageState extends State<Formpage> {
                       fontSize: 18,
                     ),
                   ),
+                ),
+                gambar != null
+                    ? Image.network(
+                        gambar!,
+                        height: 120,
+                        width: 120,
+                      )
+                    : const Text('No image selected'),
+                const SizedBox(
+                  height: 20,
                 ),
                 Row(
                   children: [
@@ -277,15 +303,12 @@ class _FormpageState extends State<Formpage> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                gambar != null
-                    ? Image.network(gambar!)
-                    : const Text('No image selected'),
-                const SizedBox(
-                  height: 20,
-                ),
                 ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (_formKey.currentState!.validate() &&
+                        gambar != null &&
+                        posisi != null &&
+                        status != null) {
                       _formKey.currentState!.save();
                       FormModel dk = FormModel(
                           nama: nama!,
@@ -300,6 +323,10 @@ class _FormpageState extends State<Formpage> {
                           content: Text('Data Karyawan Berhasil ditambahkan')));
 
                       Navigator.pop(context, true);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text(
+                              'Data karyawan belum terisi semua silahkan lengkapi terlebih dahulu')));
                     }
                   },
                   child: const Text("Simpan"),
