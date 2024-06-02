@@ -2,21 +2,24 @@ import 'package:app_data_karyawan/view/homepage.dart';
 import 'package:flutter/material.dart';
 
 class DetailDataPage extends StatefulWidget {
-  const DetailDataPage(
-      {super.key,
-      this.id,
-      this.nama,
-      this.notelp,
-      this.posisi,
-      this.status,
-      this.alamat,
-      this.gambar});
+  const DetailDataPage({
+    super.key,
+    this.id,
+    this.nik,
+    this.nama,
+    this.notelp,
+    this.jk,
+    this.tanggal,
+    this.alamat,
+    this.gambar,
+  });
 
   final String? id;
+  final String? nik;
   final String? nama;
   final String? notelp;
-  final String? posisi;
-  final String? status;
+  final String? jk;
+  final String? tanggal;
   final String? alamat;
   final String? gambar;
 
@@ -32,7 +35,7 @@ class _DetailDataPageState extends State<DetailDataPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       appBar: AppBar(
-        title: const Text("Detail Data Karyawan"),
+        title: const Text("Detail Data Pemilih"),
       ),
       body: SafeArea(
         child: Form(
@@ -52,6 +55,34 @@ class _DetailDataPageState extends State<DetailDataPage> {
                       fit: BoxFit.cover,
                     ),
                   ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: const Text(
+                    'Nik :',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.name,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.card_membership),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  initialValue: widget.nik,
+                  readOnly: true,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Container(
                   alignment: Alignment.centerLeft,
                   child: const Text(
@@ -111,7 +142,7 @@ class _DetailDataPageState extends State<DetailDataPage> {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: const Text(
-                    'Posisi :',
+                    'Jenis Kelamin :',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -122,7 +153,7 @@ class _DetailDataPageState extends State<DetailDataPage> {
                 TextFormField(
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.personal_injury_outlined),
+                    prefixIcon: const Icon(Icons.group_rounded),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -130,7 +161,7 @@ class _DetailDataPageState extends State<DetailDataPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  initialValue: widget.posisi,
+                  initialValue: widget.jk,
                   readOnly: true,
                 ),
                 const SizedBox(
@@ -139,7 +170,7 @@ class _DetailDataPageState extends State<DetailDataPage> {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: const Text(
-                    'Status :',
+                    'Tanggal :',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -150,7 +181,7 @@ class _DetailDataPageState extends State<DetailDataPage> {
                 TextFormField(
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.offline_pin),
+                    prefixIcon: const Icon(Icons.date_range_outlined),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -158,7 +189,7 @@ class _DetailDataPageState extends State<DetailDataPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  initialValue: widget.status,
+                  initialValue: widget.tanggal,
                   readOnly: true,
                 ),
                 const SizedBox(

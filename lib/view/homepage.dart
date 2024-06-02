@@ -12,16 +12,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var dkController = DataKaryawanController();
+  var dpController = DataPemilihController();
 
   @override
   void initState() {
-    dkController.getDataKaryawan();
+    dpController.getDataPemilih();
     super.initState();
   }
 
   // Future<void> _refreshData() async {
-  //   await dkController.getDataKaryawan();
+  //   await dkController.getdatapemilih();
   // }
 
   @override
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: StreamBuilder<List<DocumentSnapshot>>(
-                stream: dkController.stream,
+                stream: dpController.stream,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(
@@ -46,10 +46,10 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
 
-                  final List<DocumentSnapshot> datakaryawan = snapshot.data!;
+                  final List<DocumentSnapshot> datapemilih = snapshot.data!;
 
                   return ListView.builder(
-                    itemCount: datakaryawan.length,
+                    itemCount: datapemilih.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(5.0),
@@ -59,19 +59,20 @@ class _HomePageState extends State<HomePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => DetailDataPage(
-                                  id: datakaryawan[index]['id'],
-                                  nama: datakaryawan[index]['nama'],
-                                  notelp: datakaryawan[index]['notelp'],
-                                  posisi: datakaryawan[index]['posisi'],
-                                  status: datakaryawan[index]['status'],
-                                  alamat: datakaryawan[index]['alamat'],
-                                  gambar: datakaryawan[index]['gambar'],
+                                  id: datapemilih[index]['id'],
+                                  nik: datapemilih[index]['nik'],
+                                  nama: datapemilih[index]['nama'],
+                                  notelp: datapemilih[index]['notelp'],
+                                  jk: datapemilih[index]['jk'],
+                                  tanggal: datapemilih[index]['tanggal'],
+                                  alamat: datapemilih[index]['alamat'],
+                                  gambar: datapemilih[index]['gambar'],
                                 ),
                               ),
                             ).then((value) {
                               if (value == true) {
                                 setState(() {
-                                  dkController.getDataKaryawan();
+                                  dpController.getDataPemilih();
                                 });
                               }
                             });
@@ -89,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Image.network(
-                                    datakaryawan[index]['gambar'],
+                                    datapemilih[index]['gambar'],
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -99,30 +100,25 @@ class _HomePageState extends State<HomePage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Nama : ${datakaryawan[index]['nama']}",
+                                        "Nik : ${datapemilih[index]['nik']}",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        "No. Telp : ${datakaryawan[index]['notelp']}",
+                                        "Nama : ${datapemilih[index]['nama']}",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        "Posisi : ${datakaryawan[index]['posisi']}",
+                                        "No. Telp : ${datapemilih[index]['notelp']}",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        "Status : ${datakaryawan[index]['status']}",
+                                        "Tanggal : ${datapemilih[index]['tanggal']}",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Text(
-                                        "Alamat : ${datakaryawan[index]['alamat']}",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      )
                                     ],
                                   ),
                                 )
@@ -146,7 +142,7 @@ class _HomePageState extends State<HomePage> {
             MaterialPageRoute(builder: (context) => Formpage()),
           ).then((value) => {
                 setState(() {
-                  dkController.getDataKaryawan();
+                  dpController.getDataPemilih();
                 })
               });
         },

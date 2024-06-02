@@ -6,6 +6,7 @@ import 'package:app_data_karyawan/view/maps_page.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class Formpage extends StatefulWidget {
   const Formpage({super.key});
@@ -17,34 +18,17 @@ class Formpage extends StatefulWidget {
 class _FormpageState extends State<Formpage> {
   final _formKey = GlobalKey<FormState>();
 
+  String? nik;
   String? nama;
   String? notelp;
-  String? posisi;
-  String? status;
+  String? jk;
+  String? tanggal;
   String? alamat;
   String? gambar;
 
-  var dkController = DataKaryawanController();
+  var dpController = DataPemilihController();
 
-  List<String> pilihanPosisi = [
-    'Kasir',
-    'Karyawan Gudang',
-    'Karyawan Toko',
-    'Supplier'
-  ];
-
-  List<String> pilihanStatus = ['Aktif', 'Tidak Aktif'];
-
-  List<DropdownMenuItem> generatePosisi(List<String> pilPosisi) {
-    List<DropdownMenuItem> itemsPosisi = [];
-    for (var itemPosisi in pilPosisi) {
-      itemsPosisi.add(DropdownMenuItem(
-        child: Text(itemPosisi),
-        value: itemPosisi,
-      ));
-    }
-    return itemsPosisi;
-  }
+  List<String> pilihanStatus = ['Laki - laki', 'Perempuan'];
 
   List<DropdownMenuItem> generateStatus(List<String> pilStatus) {
     List<DropdownMenuItem> itemsStatus = [];
@@ -57,6 +41,8 @@ class _FormpageState extends State<Formpage> {
     return itemsStatus;
   }
 
+  final TextEditingController datetimeinput = TextEditingController();
+  final TextEditingController _controllerNik = TextEditingController();
   final TextEditingController _controllerNama = TextEditingController();
   final TextEditingController _controllerNoTelp = TextEditingController();
   final TextEditingController _controllerAlamat = TextEditingController();
@@ -66,7 +52,7 @@ class _FormpageState extends State<Formpage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       appBar: AppBar(
-        title: const Text("Pengisian Data Karyawan"),
+        title: const Text("Pengisian Data Pemilih"),
       ),
       body: SafeArea(
         child: Form(
@@ -75,6 +61,43 @@ class _FormpageState extends State<Formpage> {
             padding: const EdgeInsets.all(30.0),
             child: Column(
               children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: const Text(
+                    'Nik :',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                TextFormField(
+                  controller: _controllerNik,
+                  keyboardType: TextInputType.name,
+                  decoration: InputDecoration(
+                    hintText: "Masukkan nik pemilih",
+                    prefixIcon: const Icon(Icons.card_membership),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    nik = value;
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'nik tidak boleh kosong';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Container(
                   alignment: Alignment.centerLeft,
                   child: const Text(
@@ -90,7 +113,7 @@ class _FormpageState extends State<Formpage> {
                   controller: _controllerNama,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
-                    hintText: "Masukkan nama karyawan",
+                    hintText: "Masukkan nama pemilih",
                     prefixIcon: const Icon(Icons.person),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -127,7 +150,7 @@ class _FormpageState extends State<Formpage> {
                   controller: _controllerNoTelp,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
-                    hintText: "Masukkan nomor HP karyawan",
+                    hintText: "Masukkan nomor HP pemilih",
                     prefixIcon: const Icon(Icons.smartphone),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -152,7 +175,7 @@ class _FormpageState extends State<Formpage> {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: const Text(
-                    'Posisi :',
+                    'Jenis Kelamin :',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -167,18 +190,23 @@ class _FormpageState extends State<Formpage> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.black, width: 1),
                       borderRadius: BorderRadius.circular(10)),
-                  child: DropdownButton(
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down_circle_rounded),
-                    dropdownColor: const Color.fromARGB(255, 223, 121, 238),
-                    hint: const Text("Pilih posisi karyawan"),
-                    value: posisi,
-                    items: generatePosisi(pilihanPosisi),
-                    onChanged: (itemPosisi) {
-                      setState(() {
-                        posisi = itemPosisi;
-                      });
-                    },
+                  child: Row(
+                    children: [
+                      const Icon(Icons.group_rounded),
+                      DropdownButton(
+                        borderRadius: BorderRadius.circular(10),
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        dropdownColor: const Color.fromARGB(255, 223, 121, 238),
+                        hint: const Text("Pilih Jenis Kelamin"),
+                        value: jk,
+                        items: generateStatus(pilihanStatus),
+                        onChanged: (itemStatus) {
+                          setState(() {
+                            jk = itemStatus;
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(
@@ -187,7 +215,7 @@ class _FormpageState extends State<Formpage> {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: const Text(
-                    'Status :',
+                    'Tanggal :',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -195,30 +223,38 @@ class _FormpageState extends State<Formpage> {
                     ),
                   ),
                 ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(left: 10),
-                  margin: const EdgeInsets.only(right: 130),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: DropdownButton(
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down_circle_rounded),
-                    dropdownColor: const Color.fromARGB(255, 223, 121, 238),
-                    hint: const Text("Pilih Status karyawan"),
-                    value: status,
-                    items: generateStatus(pilihanStatus),
-                    onChanged: (itemStatus) {
-                      setState(() {
-                        status = itemStatus;
-                      });
-                    },
+                TextFormField(
+                  controller: datetimeinput,
+                  decoration: InputDecoration(
+                    hintText: "Pilih Tanggal",
+                    suffixIcon: const Icon(Icons.date_range_outlined),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
+                  readOnly: true,
+                  validator: validateTanggal,
+                  onTap: () async {
+                    DateTime? tanggalpick = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                    );
+
+                    if (tanggalpick != null) {
+                      tanggal = DateFormat('dd-MM-yyyy').format(tanggalpick);
+
+                      setState(() {
+                        datetimeinput.text = tanggal.toString();
+                      });
+                    }
+                  },
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 Container(
                   alignment: Alignment.centerLeft,
                   child: const Text(
@@ -234,8 +270,8 @@ class _FormpageState extends State<Formpage> {
                   controller: _controllerAlamat,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
-                    hintText: "Masukkan Alamat karyawan",
-                    prefixIcon: const Icon(Icons.work),
+                    hintText: "Masukkan Alamat pemilih",
+                    prefixIcon: const Icon(Icons.location_on),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -283,7 +319,7 @@ class _FormpageState extends State<Formpage> {
                         height: 120,
                         width: 120,
                       )
-                    : const Text('No image selected'),
+                    : const Text('Tidak ada foto yg dipilih'),
                 const SizedBox(
                   height: 20,
                 ),
@@ -291,7 +327,7 @@ class _FormpageState extends State<Formpage> {
                   children: [
                     ElevatedButton.icon(
                       onPressed: () => _uploadImage(ImageSource.camera),
-                      icon: const Icon(Icons.camera),
+                      icon: const Icon(Icons.camera_alt),
                       label: const Text('Camera'),
                     ),
                     const SizedBox(width: 10),
@@ -307,26 +343,26 @@ class _FormpageState extends State<Formpage> {
                   onPressed: () {
                     if (_formKey.currentState!.validate() &&
                         gambar != null &&
-                        posisi != null &&
-                        status != null) {
+                        jk != null) {
                       _formKey.currentState!.save();
                       FormModel dk = FormModel(
+                          nik: nik!,
                           nama: nama!,
                           notelp: notelp!,
-                          posisi: posisi!,
-                          status: status!,
+                          jk: jk!,
+                          tanggal: datetimeinput.text,
                           alamat: _controllerAlamat.text,
                           gambar: gambar!);
 
-                      dkController.addDataKaryawan(dk);
+                      dpController.addDataPemilih(dk);
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Data Karyawan Berhasil ditambahkan')));
+                          content: Text('Data Pemilih Berhasil ditambahkan')));
 
                       Navigator.pop(context, true);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text(
-                              'Data karyawan belum terisi semua silahkan lengkapi terlebih dahulu')));
+                              'Data pemilih belum terisi semua silahkan lengkapi terlebih dahulu')));
                     }
                   },
                   child: const Text("Simpan"),
@@ -373,4 +409,11 @@ class _FormpageState extends State<Formpage> {
       }
     }
   }
+}
+
+String? validateTanggal(String? value) {
+  if (value == null || value.isEmpty) {
+    return "Tolong masukan tanggal";
+  }
+  return null;
 }
